@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable thermonitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .thermometer {
+            width: 50px;
+            height: 300px;
+            background: #ddd;
+            position: relative;
+            border-radius: 25px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: red;
+            transition: height 0.5s ease;
+        }
+        .goal {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .menu {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .menu-content {
+            display: none;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 200px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .menu:hover .menu-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button>☰</button>
+        <div class="menu-content">
+            <label for="nameInput">Fundraiser Name:</label>
+            <input type="text" id="nameInput" placeholder="Enter name" oninput="setFundraiserName()">
+            <br>
+            <label for="goalInput">Set Goal: £</label>
+            <input type="number" id="goalInput" value="1000">
+            <button onclick="setGoal()">Set</button>
+            <br>
+            <label for="raisedInput">Amount Raised: £</label>
+            <input type="number" id="raisedInput" placeholder="Enter amount raised">
+            <button onclick="updateThermometer()">Update</button>
+        </div>
+    </div>
+    
+    <h1 id="fundraiserName">Set Name In Menu</h1>
+    <div class="goal">Goal: £<span id="goalAmount">1000</span></div>
+    <div class="thermometer">
+        <div class="fill" id="fill" style="height: 0%;"></div>
+    </div>
+    <div class="goal">Raised: £<span id="raisedAmount">0</span></div>
+    
+    <script>
+        let goalAmount = 1000;
+
+        function setGoal() {
+            goalAmount = parseFloat(document.getElementById('goalInput').value) || 1000;
+            document.getElementById('goalAmount').textContent = goalAmount;
+            updateThermometer();
+        }
+
+        function updateThermometer() {
+            const raised = parseFloat(document.getElementById('raisedInput').value) || 0;
+            document.getElementById('raisedAmount').textContent = raised;
+            const percentage = Math.min((raised / goalAmount) * 100, 100);
+            document.getElementById('fill').style.height = percentage + '%';
+        }
+
+        function setFundraiserName() {
+            const name = document.getElementById('nameInput').value;
+            document.getElementById('fundraiserName').textContent = name || "Fundraising Thermometer";
+        }
+    </script>
+</body>
+</html>
